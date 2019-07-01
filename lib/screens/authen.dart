@@ -11,15 +11,28 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  // Explicit
+  double mySize = 175.0;
+
+  // Method
   Widget showLogo() {
-    return Image.asset(
-      'images/logo.png',
-      fit: BoxFit.contain,
+    return Container(
+      width: mySize,
+      height: mySize,
+      child: Image.asset(
+        'images/logo.png',
+        fit: BoxFit.contain,
+      ),
     ); //ใส่รูปภาพ
   }
 
   Widget showText() {
-    return Text('Authen'); //ใส่ตัวหนังสือ
+    return Text('NATMEX',
+        style: TextStyle(
+            fontSize: 45.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.yellow[700],
+            fontFamily: 'VarelaRound')); //ใส่ตัวหนังสือ
   }
 
   @override
