@@ -9,6 +9,9 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // Explicit
+  final formKey = GlobalKey<FormState>();
+  String nameString, emailString, passwordString;
+
   // Method
   Widget nameText() {
     return TextFormField(
@@ -22,12 +25,19 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.blue,
         ),
-      ),
+      ),validator: (String value){
+        if (value.isEmpty) { //สิ่งที่กรอกไปในช่อง name จะเก็บไว้ใน value
+          return 'Please Fill Name in Blank'; //ถ้าไม่กรอกจะฟ้องคำนี้
+        }
+      },onSaved: (String value){//หลังจากอัพขึ้นคลาวด์ ให้เอาไปเก็บค่าไว้ที่ nameString
+        nameString = value;
+      },
     );
   }
 
   Widget emailText() {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'Email :',
         labelStyle: TextStyle(color: Colors.purple),
@@ -38,7 +48,13 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.purple,
         ),
-      ),
+      ),validator: (String value){
+        if (!((value.contains('@')) && (value.contains('.')))) {
+          return 'Type Email Format';
+        }
+      },onSaved: (String value){
+        emailString = value;
+      },
     );
   }
 
@@ -54,46 +70,64 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.green,
         ),
-      ),
+      ),validator: (String value){
+        if (value.length <= 5) {
+          return 'Pass Much More 6 Character';
+        }
+      },onSaved: (String value){
+        passwordString = value;
+      },
     );
   }
 
   Widget uploadButton() {
     return IconButton(
       icon: Icon(Icons.cloud_upload),
-      onPressed: () {},
+      onPressed: () {
+        print('Upload');
+        if (formKey.currentState.validate()) {//validate คือ ตรวจสอบว่า true หมดไหม
+          formKey.currentState.save();
+          print('Name = $nameString, Email = $emailString, Pass = $passwordString');
+          //อัพไปคลาวด์แล้วแสดงผลตามที่โปรแกรม
+        }
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.yellow,
         title: Text('Register'),
         actions: <Widget>[uploadButton()],
       ),
-      body: Container(
-        //บรรทัดนี้คือการจัดการพื้นหลัง
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/book.jpg'),
-            fit: BoxFit.cover, //ปรับภาพพื้นหลังให้คงอัตราส่วนไว้
-          ),
-        ),
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(top: 60.0),
+      body: Form(
+        key: formKey,
         child: Container(
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.4)),
-          width: 300.0,
-          height: 300.0,
-          child: Column(
-            children: <Widget>[
-              nameText(),
-              emailText(),
-              passwordText(),
-            ],
+          //บรรทัดนี้คือการจัดการพื้นหลัง
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/book.jpg'),
+              fit: BoxFit.cover, //ปรับภาพพื้นหลังให้คงอัตราส่วนไว้
+            ),
+          ),
+          alignment: Alignment.topCenter,
+          padding: EdgeInsets.only(top: 60.0),
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            decoration:
+                BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.2)),
+            width: 300.0,
+            height: 285.0,
+            child: Column(
+              children: <Widget>[
+                nameText(),
+                emailText(),
+                passwordText(),
+              ],
+            ),
           ),
         ),
       ),
