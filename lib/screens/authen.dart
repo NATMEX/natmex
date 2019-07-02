@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 
-//Ctrl+Alt+F=จัดระเบียบ
-//flutter_run=run
-//View>Terminal=เปิดกล่องใส่คำสั่ง
+//คำสั่ง TERMINAL
+//Shift+Alt+F = จัดระเบียบโค้ด
+//flutter_run = run
+//flutter_devices = เช็คอุปกรณ์
+//View>Terminal = เปิดกล่องใส่คำสั่ง
 
 class Authen extends StatefulWidget {
   @override
@@ -12,9 +14,56 @@ class Authen extends StatefulWidget {
 
 class _AuthenState extends State<Authen> {
   // Explicit
-  double mySize = 175.0;
+  double mySize = 175.0; //ขนาดรูปภาพ
 
-  // Method
+  //Method
+
+  Widget signInButton() {
+    return RaisedButton(
+      child: Text('Sign In'),
+      onPressed: () {},//ปุ่มสวย
+    );
+  }
+
+  Widget myButton() {
+    return Container(
+      width: 220.0,
+      child: Row(
+        //แสดงผลจากซ้ายไปขวา
+        children: <Widget>[
+          signInButton(),
+          signInButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget passwordText() {
+    return Container(
+      width: 220.0,
+      child: TextFormField(
+        obscureText: true,//เปลี่ยนช่องใส่รหัสเป็นดอกจัน
+        decoration: InputDecoration(//ทำให้เป็นช่องอินพุท
+          labelText: 'Password :',
+          hintText: 'More 6 Character',
+        ),
+      ),
+    );
+  }
+
+  Widget emailText() {
+    return Container(
+      width: 220.0,
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(//ทำให้เป็นช่องอินพุท
+          labelText: 'Email :',
+          hintText: 'you@email.com',
+        ),
+      ),
+    );
+  }
+
   Widget showLogo() {
     return Container(
       width: mySize,
@@ -23,7 +72,7 @@ class _AuthenState extends State<Authen> {
         'images/logo.png',
         fit: BoxFit.contain,
       ),
-    ); //ใส่รูปภาพ
+    );
   }
 
   Widget showText() {
@@ -32,17 +81,25 @@ class _AuthenState extends State<Authen> {
             fontSize: 45.0,
             fontWeight: FontWeight.bold,
             color: Colors.yellow[700],
-            fontFamily: 'VarelaRound')); //ใส่ตัวหนังสือ
+            fontFamily: 'VarelaRound'));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      resizeToAvoidBottomPadding: false,//แก้บัคช่องใส่รหัสมีแถบเหลือง
+      body: Container(//ถุง
         padding: EdgeInsets.only(top: 60.0), //ห่างจากด้านบน
         alignment: Alignment.topCenter, //ไว้ตรงกลาง
         child: Column(
-          children: <Widget>[showLogo(), showText()], //แสดงผลเป็นบรรทัด
+          //แสดงผลจากบนลงล่าง
+          children: <Widget>[
+            showLogo(),
+            showText(),
+            emailText(),
+            passwordText(),
+            myButton(),
+          ],
         ),
       ),
     );
