@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "487704653883",
+    "firebase_url": "https://natmexssru.firebaseio.com",
+    "project_id": "natmexssru",
+    "storage_bucket": "natmexssru.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487704653883:android:2306aa59004ce8b3",
+        "android_client_info": {
+          "package_name": "th.in.androidthai.natmex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487704653883-b587i20mr0b7ngsvu3pp15midgdbrsqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1lKWfeIk1SnrZ8O_9a5meE_XdhGzpsLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487704653883-b587i20mr0b7ngsvu3pp15midgdbrsqa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
