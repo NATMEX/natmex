@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:natmex/screens/my_services.dart';
 import 'package:natmex/screens/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //คำสั่ง TERMINAL
 //Shift+Alt+F = จัดระเบียบโค้ด
@@ -19,8 +21,32 @@ class Authen extends StatefulWidget {
 class _AuthenState extends State<Authen> {
   // Explicit
   double mySize = 175.0; //ขนาดรูปภาพ
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   //Method
+
+  @override
+  void initState(){
+    super.initState();
+    checkStatus();
+  }
+
+  Future<void> checkStatus()async{
+
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    if (firebaseUser != null) {
+      
+    }
+  }
+
+
+  void moveToService(){
+
+    var serviceRoute = MaterialPageRoute(builder: (BuildContext context) => MyServices());
+    Navigator.of(context).pushAndRemoveUntil(serviceRoute, (Route<dynamic> Route) => false);
+
+  }
+
 
   Widget mySizeBox() {
     return SizedBox(

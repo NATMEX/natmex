@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0; //เรียกไฟล์แพคเกจมาใช้
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:natmex/screens/my_services.dart';
 
 //พิมพ์ stl แล้วเลือก State ful,less
 class Register extends StatefulWidget {
@@ -11,6 +13,7 @@ class _RegisterState extends State<Register> {
   // Explicit
   final formKey = GlobalKey<FormState>();
   String nameString, emailString, passwordString;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   // Method
   Widget nameText() {
@@ -25,11 +28,15 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.blue,
         ),
-      ),validator: (String value){
-        if (value.isEmpty) { //สิ่งที่กรอกไปในช่อง name จะเก็บไว้ใน value
+      ),
+      validator: (String value) {
+        if (value.isEmpty) {
+          //สิ่งที่กรอกไปในช่อง name จะเก็บไว้ใน value
           return 'Please Fill Name in Blank'; //ถ้าไม่กรอกจะฟ้องคำนี้
         }
-      },onSaved: (String value){//หลังจากอัพขึ้นคลาวด์ ให้เอาไปเก็บค่าไว้ที่ nameString
+      },
+      onSaved: (String value) {
+        //หลังจากอัพขึ้นคลาวด์ ให้เอาไปเก็บค่าไว้ที่ nameString
         nameString = value;
       },
     );
@@ -48,11 +55,13 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.purple,
         ),
-      ),validator: (String value){
+      ),
+      validator: (String value) {
         if (!((value.contains('@')) && (value.contains('.')))) {
           return 'Type Email Format';
         }
-      },onSaved: (String value){
+      },
+      onSaved: (String value) {
         emailString = value;
       },
     );
@@ -70,11 +79,13 @@ class _RegisterState extends State<Register> {
           size: 48.0,
           color: Colors.green,
         ),
-      ),validator: (String value){
+      ),
+      validator: (String value) {
         if (value.length <= 5) {
           return 'Pass Much More 6 Character';
         }
-      },onSaved: (String value){
+      },
+      onSaved: (String value) {
         passwordString = value;
       },
     );
@@ -85,11 +96,65 @@ class _RegisterState extends State<Register> {
       icon: Icon(Icons.cloud_upload),
       onPressed: () {
         print('Upload');
-        if (formKey.currentState.validate()) {//validate คือ ตรวจสอบว่า true หมดไหม
+        if (formKey.currentState.validate()) {
+          //validate คือ ตรวจสอบว่า true หมดไหม
           formKey.currentState.save();
-          print('Name = $nameString, Email = $emailString, Pass = $passwordString');
+          print(
+              'Name = $nameString, Email = $emailString, Pass = $passwordString');
+          register();
           //อัพไปคลาวด์แล้วแสดงผลตามที่โปรแกรม
         }
+      },
+    );
+  }
+
+//ถ้าฉันทำงานสำเร็จให้แสดง Register Success
+  Future<void> register() async {
+    await firebaseAuth
+        .createUserWithEmailAndPassword(
+      email: emailString,
+      password: passwordString,
+    )
+        .then((objResponse) {
+      print('Register Success');
+      setUpDisplayName();
+    }).catchError((objResponse) {
+      print('${objResponse.toString()}');
+      myAlert(objResponse.code.toString(), objResponse.message.toString());
+    });
+  }
+
+  Future<void> setUpDisplayName()async{
+
+    await firebaseAuth.currentUser().then((response){
+      UserUpdateInfo updateInfo = UserUpdateInfo();
+      updateInfo.displayName = nameString;
+      response.updateProfile(updateInfo);
+
+      var serviceRoute = 
+          MaterialPageRoute(builder: (BuildContext context) => MyServices());
+          Navigator.of(context).pushAndRemoveUntil(serviceRoute, (Route<dynamic> route) => false);
+
+          });
+
+  }
+
+  void myAlert(String titleString, String messageString) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(titleString),
+          content: Text(messageString),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
       },
     );
   }
