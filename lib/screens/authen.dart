@@ -25,26 +25,24 @@ class _AuthenState extends State<Authen> {
 
   //Method
 
-  @override
-  void initState(){
+   @override
+  void initState() {
     super.initState();
-    checkStatus();
+    checkstatus();
   }
 
-  Future<void> checkStatus()async{
-
+  Future<void> checkstatus() async {
     FirebaseUser firebaseUser = await firebaseAuth.currentUser();
     if (firebaseUser != null) {
-      
+      moveToService();
     }
   }
 
-
-  void moveToService(){
-
-    var serviceRoute = MaterialPageRoute(builder: (BuildContext context) => MyServices());
-    Navigator.of(context).pushAndRemoveUntil(serviceRoute, (Route<dynamic> Route) => false);
-
+  void moveToService() {
+    var serviceRoute =
+        MaterialPageRoute(builder: (BuildContext context) => MyServices());
+    Navigator.of(context)
+        .pushAndRemoveUntil( serviceRoute, (Route<dynamic> route) => false);
   }
 
 
